@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nexus Academic - Student Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --navy: #0b2a55; --ink: #111827; --line: #dfe3e8; --bg: #f3f4f6; --track: #eceff5; }
+  * { box-sizing: border-box; margin: 0; }
+  body { font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--bg); color: var(--ink); min-height: 100vh; }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--navy); outline-offset: 2px; }
+  .i { width: 26px; height: 26px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* Header */
+  header { height: 78px; background: #fff; border-bottom: 1px solid var(--line); display: flex; align-items: center; padding: 0 34px; gap: 24px; position: sticky; top: 0; z-index: 10; }
+  .logo { font-size: 30px; letter-spacing: -.01em; color: var(--navy); white-space: nowrap; }
+  .logo b { font-weight: 700; } .logo span { font-weight: 400; }
+  .search { flex: 0 1 540px; margin: 0 auto 0 66px; display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 16px; background: #eef0f3; border-radius: 10px; color: #6b7280; }
+  .search input { flex: 1; border: 0; background: none; outline: none; font: inherit; font-size: 18px; color: var(--ink); }
+  .bell { position: relative; background: none; border: 0; cursor: pointer; display: grid; margin-left: auto; }
+  .bell .i { width: 30px; height: 30px; color: #4b5563; }
+  .bell em { position: absolute; top: -8px; right: -8px; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 10px; background: #dc2626; color: #fff; font-size: 12px; font-style: normal; font-weight: 600; display: grid; place-items: center; }
+  .me { display: flex; align-items: center; gap: 12px; text-align: right; }
+  .me b { display: block; font-size: 17px; font-weight: 500; } .me small { font-size: 14px; color: #4b5563; }
+  .badge { width: 44px; height: 44px; border-radius: 50%; background: var(--navy); color: #fff; display: grid; place-items: center; font-size: 18px; font-weight: 500; }
+
+  /* Sidebar */
+  .shell { display: flex; }
+  aside { width: 96px; flex: none; background: #fff; border-right: 1px solid var(--line); min-height: calc(100vh - 78px); padding: 26px 0; display: flex; flex-direction: column; align-items: center; gap: 20px; position: sticky; top: 78px; height: calc(100vh - 78px); }
+  aside a { position: relative; width: 54px; height: 54px; display: grid; place-items: center; border-radius: 10px; color: #6b7280; }
+  aside a:hover { background: var(--bg); color: var(--navy); }
+  aside a[aria-current="page"] { background: #e8edf5; color: var(--navy); }
+  aside a[aria-current="page"]::before { content: ""; position: absolute; left: -21px; top: 0; bottom: 0; width: 6px; background: var(--navy); border-radius: 0 4px 4px 0; }
+  aside .sp { flex: 1; }
+
+  /* Main */
+  main { flex: 1; min-width: 0; padding: 26px 34px 40px; max-width: 1280px; }
+  .top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 22px; }
+  .top h1 { font-size: 32px; font-weight: 700; } .top p { font-size: 20px; margin-top: 2px; }
+  .pill { background: var(--navy); color: #fff; border-radius: 8px; padding: 12px 15px; font-size: 17px; font-weight: 500; }
+  .pill:hover { background: #14396f; }
+  .layout { display: grid; grid-template-columns: 411px 1fr; gap: 20px; align-items: start; }
+  .card { background: #fff; border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 1px 3px rgba(0,0,0,.05); padding: 18px 20px; }
+  .card h2 { font-size: 22px; font-weight: 600; }
+  .head { display: flex; justify-content: space-between; align-items: flex-start; }
+  .dd { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: #fff; border-radius: 6px; padding: 4px 10px; font-size: 16px; cursor: pointer; }
+  .dd svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; }
+  .right { display: grid; gap: 20px; }
+
+  /* Rings */
+  .rings { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 8px; margin-top: 14px; text-align: center; }
+  .ring { position: relative; width: 150px; height: 150px; margin: 0 auto; }
+  .ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .ring circle { fill: none; stroke-width: 12; }
+  .ring .t { stroke: var(--track); } .ring .v { stroke: var(--navy); stroke-linecap: round; }
+  .ring b { position: absolute; inset: 0; display: grid; place-items: center; font-size: 34px; font-weight: 500; }
+  .rings p { margin-top: 10px; font-size: 17px; line-height: 1.25; }
+  .rings.low .warn { color: #b45309; }
+
+  /* Warning */
+  .alert { margin-top: 14px; background: #fdebd3; border-radius: 10px; padding: 14px 16px; font-size: 17px; line-height: 1.4; }
+  .alert h3 { display: flex; align-items: center; gap: 10px; font-size: 22px; font-weight: 600; margin-bottom: 8px; }
+  .alert svg { width: 30px; height: 30px; flex: none; }
+
+  /* Schedule */
+  .sched { display: grid; grid-template-columns: 1fr 260px; gap: 0; padding: 0; }
+  .sched > div { padding: 18px 20px; }
+  .cal { border-left: 1px solid var(--line); }
+  .sched h2 { font-size: 22px; } .sched .sub { font-size: 16px; }
+  .lbl { margin: 22px 0 6px; font-size: 16px; color: #374151; }
+  .slot { display: grid; grid-template-columns: 118px 1fr; align-items: center; gap: 10px; border-top: 1px solid var(--line); padding: 8px 0; font-size: 18px; }
+  .slot:last-child { border-bottom: 1px solid var(--line); }
+  .ev { display: flex; justify-content: space-between; background: #eceff3; border: 1px solid #d9dee5; border-left: 5px solid var(--navy); border-radius: 6px; padding: 9px 12px; }
+  .cal .m { display: flex; justify-content: space-between; align-items: center; font-size: 18px; font-weight: 600; }
+  .cal .m button { background: none; border: 0; cursor: pointer; padding: 4px; color: #374151; display: grid; }
+  .cal .m svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; }
+  .days { display: grid; grid-template-columns: repeat(7, 1fr); row-gap: 6px; margin-top: 18px; text-align: center; font-size: 17px; }
+  .days .h { font-weight: 600; margin-bottom: 4px; }
+  .days .o { color: #b3b8c0; }
+  .days button { background: none; border: 0; cursor: pointer; width: 32px; height: 30px; margin: 0 auto; border-radius: 6px; font-size: 17px; }
+  .days button:hover { background: var(--bg); }
+  .days button.sel { background: var(--navy); color: #fff; }
+
+  @media (max-width: 1100px) { .layout { grid-template-columns: 1fr; } .rings { grid-template-columns: repeat(4, 1fr); } }
+  @media (max-width: 800px) {
+    header { padding: 0 16px; } .search, .me div { display: none; } .logo { font-size: 24px; }
+    aside { display: none; } main { padding: 20px 16px 32px; }
+    .rings { grid-template-columns: 1fr 1fr; } .sched { grid-template-columns: 1fr; } .cal { border-left: 0; border-top: 1px solid var(--line); }
+    .top { flex-direction: column; gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="dashboard.html"><b>Nexus</b> <span>Academic</span></a>
+  <label class="search"><svg class="i" viewBox="0 0 24 24" style="width:22px;height:22px"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input type="search" placeholder="Search..." aria-label="Search"></label>
+  <button class="bell" type="button" aria-label="3 notifications"><svg class="i" viewBox="0 0 24 24"><path d="M6 17V11a6 6 0 0112 0v6l1.5 2h-15zM10 21h4"/></svg><em>3</em></button>
+  <a class="me" href="profile.html"><div><b>Liam Anderson</b><small>Computer Science major</small></div><span class="badge">LA</span></a>
+</header>
+
+<div class="shell">
+  <aside aria-label="Sections">
+    <a href="student-dashboard.html" aria-current="page" aria-label="Dashboard"><svg class="i" viewBox="0 0 24 24" style="fill:currentColor;stroke:none"><rect x="3" y="3" width="8" height="10" rx="1.5"/><rect x="13" y="3" width="8" height="6" rx="1.5"/><rect x="3" y="15" width="8" height="6" rx="1.5"/><rect x="13" y="11" width="8" height="10" rx="1.5"/></svg></a>
+    <a href="#" aria-label="Courses"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 3v18M7 8h2M7 12h2M15 8h2"/></svg></a>
+    <a href="#" aria-label="Files"><svg class="i" viewBox="0 0 24 24"><path d="M3 6a2 2 0 012-2h4l2 2h8a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></a>
+    <a href="#" aria-label="Schedule"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg></a>
+    <a href="#" aria-label="Assignments"><svg class="i" viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6"/></svg></a>
+    <span class="sp"></span>
+    <a href="#" aria-label="Settings"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg></a>
+    <a href="index.html" id="signout" aria-label="Sign out"><svg class="i" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg></a>
+  </aside>
+
+  <main>
+    <div class="top">
+      <div><h1>Welcome Liam!</h1><p>Fall Term 2024 Overview</p></div>
+      <a class="pill" href="student-dashboard.html">Student Dashboard</a>
+    </div>
+
+    <div class="layout">
+      <section class="card" aria-labelledby="att">
+        <div class="head"><h2 id="att">Attendance Overview</h2>
+          <button class="dd" type="button">More <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button></div>
+        <div class="rings">
+          <div><div class="ring" role="img" aria-label="CS301 attendance 88 percent"><svg viewBox="0 0 150 150"><circle class="t" cx="75" cy="75" r="66"/><circle class="v" cx="75" cy="75" r="66" pathLength="100" stroke-dasharray="88 100"/></svg><b>88%</b></div><p>CS301: Algorithms<br>88%</p></div>
+          <div><div class="ring" role="img" aria-label="MA201 attendance 94 percent"><svg viewBox="0 0 150 150"><circle class="t" cx="75" cy="75" r="66"/><circle class="v" cx="75" cy="75" r="66" pathLength="100" stroke-dasharray="94 100"/></svg><b>94%</b></div><p>MA201: Calculus II<br>94%</p></div>
+          <div><div class="ring" role="img" aria-label="PH101 attendance 82 percent"><svg viewBox="0 0 150 150"><circle class="t" cx="75" cy="75" r="66"/><circle class="v" cx="75" cy="75" r="66" pathLength="100" stroke-dasharray="82 100"/></svg><b>82%</b></div><p>PH101: Physics<br>82%</p></div>
+          <div><div class="ring" role="img" aria-label="HU201 attendance 91 percent"><svg viewBox="0 0 150 150"><circle class="t" cx="75" cy="75" r="66"/><circle class="v" cx="75" cy="75" r="66" pathLength="100" stroke-dasharray="91 100"/></svg><b>91%</b></div><p>HU201: History<br>91%</p></div>
+        </div>
+      </section>
+
+      <div class="right">
+        <section class="card" aria-labelledby="ew">
+          <h2 id="ew">Early Warning</h2>
+          <div class="alert" role="alert">
+            <h3><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3L1 29h30z" fill="#c2761b"/><path d="M16 12v8M16 23.5v.5" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></svg>Critical Alert: PH101: Physics</h3>
+            <div><b style="font-weight:600">Attendance:</b> 82% (Low)</div>
+            <div><b style="font-weight:600">Current Grade:</b> 74% (C)</div>
+            <div><b style="font-weight:600">Action Required:</b> Consult Prof. Miller &amp; Review Syllabus.</div>
+          </div>
+        </section>
+
+        <section class="card sched" aria-labelledby="ts">
+          <div>
+            <div class="head"><div><h2 id="ts">Today's Schedule</h2><div class="sub">Friday, October 25, 2024</div></div>
+              <button class="dd" type="button">Today <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button></div>
+            <div class="lbl">Lecture</div>
+            <div class="slot"><span>09:00 - 10:30</span><div class="ev"><span>MA201: Calculus II</span><span>Rm 102</span></div></div>
+            <div class="slot"><span>11:00 - 12:15</span><div class="ev"><span>CS301: Algorithms</span><span>Rm 304</span></div></div>
+            <div class="slot"><span>14:00 - 15:30</span><div class="ev"><span>PH101: Physics</span><span>Lab 2B</span></div></div>
+          </div>
+          <div class="cal">
+            <div class="m">
+              <button type="button" id="prev" aria-label="Previous month"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button>
+              <span id="mt">October 2024</span>
+              <button type="button" id="next" aria-label="Next month"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
+            </div>
+            <div class="days" id="days"></div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  // Calendar (today is Oct 25, 2024 to match the schedule header)
+  var TODAY = new Date(2024, 9, 25), view = new Date(2024, 9, 1), picked = new Date(TODAY);
+  var names = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  function render() {
+    var y = view.getFullYear(), m = view.getMonth();
+    document.getElementById("mt").textContent = names[m] + " " + y;
+    var html = ["Su","M","T","W","Th","F","Sa"].map(function (d) { return '<div class="h">' + d + "</div>"; }).join("");
+    var start = new Date(y, m, 1 - new Date(y, m, 1).getDay());
+    for (var i = 0; i < 42; i++) {
+      var d = new Date(start.getFullYear(), start.getMonth(), start.getDate() + i);
+      if (i >= 35 && d.getMonth() !== m) break;
+      var other = d.getMonth() !== m, sel = d.toDateString() === picked.toDateString();
+      html += '<div class="' + (other ? "o" : "") + '"><button type="button" class="' + (sel ? "sel" : "") + '" data-t="' + d.getTime() + '">' + d.getDate() + "</button></div>";
+    }
+    document.getElementById("days").innerHTML = html;
+  }
+  document.getElementById("days").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    picked = new Date(+b.dataset.t); render();
+  });
+  document.getElementById("prev").onclick = function () { view.setMonth(view.getMonth() - 1); render(); };
+  document.getElementById("next").onclick = function () { view.setMonth(view.getMonth() + 1); render(); };
+  render();
+
+  // Login guard + sign out
+  try {
+    if (sessionStorage.getItem("nexus_signed_in") !== "1") location.replace("index.html");
+    document.getElementById("signout").addEventListener("click", function () { sessionStorage.removeItem("nexus_signed_in"); });
+  } catch (e) {}
+</script>
+</body>
+</html>

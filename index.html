@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nexus Academic - Secure Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0f2447;
+    --gold: #c9a24a;
+    --ink: #111827;
+    --muted: #6b7280;
+    --line: #c9ced6;
+    --card: #ffffff;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: var(--ink);
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    /* Replace with your own photo: url("library.jpg") center / cover */
+    background:
+      linear-gradient(90deg, rgba(90,58,30,.55) 0%, rgba(210,180,140,.25) 35%, rgba(255,240,215,.55) 100%),
+      linear-gradient(180deg, #d8c3a3 0%, #b99a72 100%);
+  }
+  /* soft blur to mimic the out-of-focus library photo */
+  body::before {
+    content: "";
+    position: absolute; inset: 0;
+    background: url("library.jpg") center / cover no-repeat;
+    filter: blur(6px);
+    transform: scale(1.05);
+    opacity: .9;
+    z-index: 0;
+  }
+  .crest {
+    position: absolute;
+    left: -6vw; top: 50%;
+    width: min(46vw, 560px);
+    transform: translateY(-50%);
+    opacity: .82;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .card {
+    position: relative; z-index: 2;
+    width: 100%; max-width: 424px;
+    background: var(--card);
+    border-radius: 8px;
+    padding: 32px 34px 28px;
+    box-shadow: 0 18px 50px rgba(0,0,0,.28);
+  }
+  .brand { display: flex; justify-content: center; align-items: center; gap: 10px; }
+  .brand svg { width: 68px; height: 68px; }
+  .wordmark { line-height: .95; color: var(--navy); }
+  .wordmark b { display: block; font-size: 38px; font-weight: 800; letter-spacing: .01em; }
+  .wordmark span { display: block; font-size: 25px; font-weight: 600; letter-spacing: .02em; margin-top: 2px; }
+  h1 { margin-top: 22px; text-align: center; font-size: 22px; font-weight: 700; color: var(--navy); }
+  .sub { margin-top: 6px; text-align: center; font-size: 14.5px; color: #374151; }
+  form { margin-top: 24px; }
+  .row { display: flex; justify-content: space-between; align-items: baseline; }
+  label, .row a { font-size: 15px; }
+  label { font-weight: 600; }
+  .field { position: relative; margin: 8px 0 18px; }
+  .field svg {
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    width: 18px; height: 18px; stroke: var(--muted); fill: none; stroke-width: 1.7;
+  }
+  input[type="text"], input[type="password"] {
+    width: 100%; height: 42px;
+    padding: 0 12px 0 44px;
+    font: inherit; font-size: 14.5px; color: var(--ink);
+    border: 1px solid var(--line); border-radius: 6px; background: #fff;
+  }
+  input::placeholder { color: #8b929c; }
+  input:focus-visible, button:focus-visible, a:focus-visible, .check input:focus-visible {
+    outline: 2px solid var(--gold); outline-offset: 2px;
+  }
+  a { color: var(--ink); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .btn {
+    width: 100%; height: 46px; margin-top: 4px;
+    font: inherit; font-size: 16.5px; font-weight: 600; color: #fff;
+    background: var(--navy); border: 0; border-radius: 6px; cursor: pointer;
+    transition: background .15s;
+  }
+  .btn:hover { background: #1a3566; }
+  .foot { margin-top: 16px; align-items: center; }
+  .check { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 400; }
+  .check input { width: 17px; height: 17px; accent-color: var(--navy); margin: 0; }
+  .foot a { font-size: 15px; }
+  @media (max-width: 720px) { .crest { display: none; } .card { padding: 26px 22px; } }
+</style>
+</head>
+<body>
+
+<!-- Large background crest -->
+<svg class="crest" viewBox="0 0 400 480" aria-hidden="true">
+  <path d="M40 40h320v210c0 110-90 170-160 200C130 420 40 360 40 250z" fill="#c9a24a"/>
+  <path d="M40 40h320v170H40z" fill="#12295a"/>
+  <path d="M200 40v170" stroke="#c9a24a" stroke-width="10"/>
+  <g fill="none" stroke="#c9a24a" stroke-width="7" stroke-linejoin="round">
+    <path d="M70 110c30-14 60-14 100 6v70c-40-18-70-18-100-6z"/>
+    <circle cx="290" cy="120" r="46"/><ellipse cx="290" cy="120" rx="20" ry="46"/><path d="M244 120h92M290 166v34M268 204h44"/>
+  </g>
+  <circle cx="200" cy="300" r="52" fill="#12295a"/>
+  <path d="M170 285c14-12 30-10 34 4s-8 22-2 36 24 6 20 22" fill="none" stroke="#c9a24a" stroke-width="10" stroke-linecap="round"/>
+  <path d="M200 352v40M172 396h56" stroke="#12295a" stroke-width="8" stroke-linecap="round"/>
+  <path d="M10 350q190 90 380 0v60q-190 90-380 0z" fill="#12295a"/>
+  <text x="200" y="405" text-anchor="middle" font-family="Inter,sans-serif" font-weight="800" font-size="34" fill="#e8e2d0" letter-spacing="3" transform="rotate(-3 200 405)">EST. 1928</text>
+</svg>
+
+<main class="card">
+  <div class="brand">
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <path d="M18 10h64v42c0 22-18 34-32 40C36 86 18 74 18 52z" fill="#c9a24a" stroke="#0f2447" stroke-width="3"/>
+      <path d="M18 10h64v30H18z" fill="#0f2447"/>
+      <path d="M50 10v30" stroke="#c9a24a" stroke-width="2"/>
+      <path d="M26 18c8-3 16-3 22 2v14c-6-4-14-4-22-1z" fill="none" stroke="#c9a24a" stroke-width="2"/>
+      <circle cx="66" cy="26" r="9" fill="none" stroke="#c9a24a" stroke-width="2"/>
+      <circle cx="50" cy="58" r="12" fill="#0f2447"/>
+      <path d="M6 72q44 16 88 0v10q-44 16-88 0z" fill="#0f2447"/>
+    </svg>
+    <div class="wordmark"><b>NEXUS</b><span>ACADEMIC</span></div>
+  </div>
+
+  <h1>Secure Portal</h1>
+  <p class="sub">Please sign in to access your student resources.</p>
+
+  <form action="#" method="post">
+    <label for="sid">Student ID</label>
+    <div class="field">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+      <input id="sid" name="student_id" type="text" placeholder="Enter your Student ID" autocomplete="username" required>
+    </div>
+
+    <div class="row">
+      <label for="pw">Password</label>
+      <a href="#">Forgot Password?</a>
+    </div>
+    <div class="field">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>
+      <input id="pw" name="password" type="password" placeholder="Enter your password" autocomplete="current-password" required>
+    </div>
+
+    <button class="btn" type="submit">Secure Login</button>
+
+    <div class="row foot">
+      <label class="check"><input type="checkbox" name="remember"> Keep me signed in</label>
+      <a href="#">Need Help?</a>
+    </div>
+  </form>
+</main>
+
+<script>
+  // Demo login: any Student ID + password goes to the dashboard.
+  // Replace with a real request to your backend before going live.
+  document.querySelector("form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    try { sessionStorage.setItem("nexus_signed_in", "1"); } catch (err) {}
+    window.location.href = "dashboard.html";
+  });
+</script>
+
+</body>
+</html>
